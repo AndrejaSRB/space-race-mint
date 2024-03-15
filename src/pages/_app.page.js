@@ -1,9 +1,11 @@
-import '@fontsource/dm-mono';
+import "@fontsource/dm-mono";
 import { Web3ContextProvider } from "@/context/web3";
 import Head from "next/head";
 import { ChakraProvider } from "@chakra-ui/react";
-import { theme } from '@/theme';
+import { theme } from "@/theme";
 import WalletProtection from "@/components/WalletProtection/WalletProtection";
+import { WagmiProvider } from "wagmi";
+import { config } from "@/web3/config";
 
 function SpaceRaces({ Component, pageProps }) {
   return (
@@ -15,7 +17,7 @@ function SpaceRaces({ Component, pageProps }) {
       <ChakraProvider theme={theme}>
         <Web3ContextProvider>
           <WalletProtection>
-            <Component {...pageProps} />
+              <Component {...pageProps} />
           </WalletProtection>
         </Web3ContextProvider>
       </ChakraProvider>

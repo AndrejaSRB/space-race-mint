@@ -1,111 +1,278 @@
+import usePurchaseTier3 from "@/hooks/usePurchaseTier3";
 import { Flex, Box, Button } from "@chakra-ui/react";
 import Image from "next/image";
+import TestImage from "../../../public/test_image.png";
+import useGetTier1Supply from "@/hooks/useGetTier1Supply";
+import useGetTier2Supply from "@/hooks/useGetTier2Supply";
+import useGetTier3Supply from "@/hooks/useGetTier3Supply";
+import usePurchaseTier1 from "@/hooks/usePurchaseTier1";
+import usePurchaseTier2 from "@/hooks/usePurchaseTier2";
+import useAllownace from "@/hooks/useAllowance";
+import useApprove from "@/hooks/useApprove";
+import { useEffect } from "react";
 
-const Tier = ({ tier }) => {
+const Tier = ({ tier, isWhitelisted }) => {
+  const { onPurchaseTier3, isPending: isPendingTier3 } = usePurchaseTier3();
+  const { onPurchaseTier1, isPending: isPendingTier1 } = usePurchaseTier1();
+  const { onPurchaseTier2, isPending: isPendingTier2 } = usePurchaseTier2();
+  const { data: supplyTier1, refetch: refetchTier1 } = useGetTier1Supply();
+  const { data: supplyTier2, refetch: refetchTier2 } = useGetTier2Supply();
+  const { data: supplyTier3, refetch: refetchTier3 } = useGetTier3Supply();
+
+  const { data: allowance } = useAllownace();
+  const { onApproval, isConfirmed } = useApprove();
+
+
+  const handleClickTier = () => {
+    if (!isPending) {
+      if (tier.id === 3) {
+        onPurchaseTier3();
+      } else if (tier.id === 1) {
+        onPurchaseTier1();
+      } else if (tier.id === 2) {
+        onPurchaseTier2();
+      }
+    }
+  };
+
+  const handleClickApprove = () => {
+    onApproval();
+  };
+
+  const generateCurrentSupply = () => {
+    if (tier.id === 1) {
+      return supplyTier1 ? Number(supplyTier1) : 0;
+    } else if (tier.id === 2) {
+      return supplyTier2 ? Number(supplyTier2) : 0;
+    } else if (tier.id === 3) {
+      return supplyTier3 ? Number(supplyTier3) : 0;
+    }
+  };
+
+  useEffect(() => {
+    refetchTier1?.();
+    refetchTier2?.();
+    refetchTier3?.();
+  }, [isPendingTier1]);
+
+  const isPending = isPendingTier1 || isPendingTier2 || isPendingTier3;
+
   return (
     <Flex
-    position="relative"
-    zIndex={1}
-    key={tier.id}
-    flexDir="column"
-    paddingBottom={{
-      base: 10,
-      lg: 0,
-    }}>
-    <Flex
       position="relative"
-      backgroundColor="#00000014"
+      zIndex={1}
+      key={tier.id}
       flexDir="column"
-      border="1px solid rgba(255, 255, 255, 0.24)"
-      p={5}>
-      <Box
-        position="absolute"
-        left="16px"
-        top="16px"
-        backgroundColor="rgba(255, 255, 255, 0.24)"
-        padding={2}
-        borderRadius={4}
-        fontSize={{
-          base: 12,
-          lg: 14,
-        }}
-        border="1px solid white">
-        {tier.title}
-      </Box>
-
-      <Image
-        src={tier.img}
-        alt={tier.title}
-        width={{
-          base: 200,
-          md: 50,
-        }}
-      />
-
-      <Flex justify="center" fontWeight="bold" position="absolute" bottom="16px" left="50%" transform={"translateX(-50%)"} fontSize={{
-        base: 16,
-        lg: 22,
-      }}>{tier.eth}</Flex>
-    </Flex>
-
-    <Flex
-      border="1px solid rgba(255, 255, 255, 0.24)"
-      mt="8px"
-      backgroundColor="#00000014"
-      p={4}
-      minH={{
-        base: 150,
-        lg: 200,
-      }}
-      flexDir="column"
-      align="center"
-      justify="space-between">
-      <Box
-        textAlign="center"
-        fontSize={{
-          base: 12,
-          lg: 16,
-        }}>
-        {tier.description}
-      </Box>
-
-      <Box fontWeight="bold">1500/1500</Box>
-    </Flex>
-
-    <Flex
-      flexDir="column"
-      align="center"
-      minH={{
-        base: "auto",
-        lg: "115px",
+      paddingBottom={{
+        base: 10,
+        lg: 0,
       }}>
-      <Button
-        h="40px"
-        mt={4}
-        textTransform="uppercase"
-        color="white"
-        backgroundColor="#CD1A64"
-        clipPath={
-          "polygon(-10% -10%, 110% -10%, 110% 110%, 10% 110%, -10% 0%);  width: 203px"
-        }>
-        {`PURCHASE T${tier.id}`}
-      </Button>
+      <Flex
+        position="relative"
+        flexDir="column"
+        p={5}
+        position="relative"
+        backgroundColor="transparent"
+        borderLeft="1px solid rgba(255, 255, 255, 0.24)"
+        overflow="hidden"
+        flexDir="column"
+        _before={{
+          content: "''",
+          height: "20%",
+          width: "calc(100% - 2px)",
+          top: "0px",
+          border: "2px solid rgba(255, 255, 255, 0.24)",
+          borderWidth: "2px 3px 0px 0px",
+          transform: "skew(45deg)",
+          transformOrigin: "right bottom",
+          position: "absolute",
+          left: 0,
+          zIndex: -1,
+        }}
+        _after={{
+          content: "''",
+          width: "calc(100% - 4px)",
+          bottom: "0px",
+          border: "2px solid rgba(255, 255, 255, 0.24)",
+          borderWidth: "2px 3px 0px 0px",
+          position: "absolute",
+          left: 0,
+          zIndex: -1,
+        }}>
+        <Box
+          position="absolute"
+          zIndex={2}
+          left="16px"
+          top="16px"
+          backgroundColor="rgba(255, 255, 255, 0.24)"
+          padding={2}
+          borderRadius={4}
+          fontSize={{
+            base: 12,
+            lg: 14,
+          }}
+          border="1px solid white">
+          {tier.title}
+        </Box>
 
-      {tier.id === 3 && (
-        <Button
-          h="40px"
-          mt={4}
-          textTransform="uppercase"
-          color="white"
-          backgroundColor="#CD1A64"
-          clipPath={
-            "polygon(-10% -10%, 110% -10%, 110% 110%, 10% 110%, -10% 0%);  width: 203px"
-          }>
-          UPGRADE TO T2
-        </Button>
+        <Box position="relative" zIndex={2}>
+          <Image
+            src={tier.img}
+            alt={tier.title}
+            width={{
+              base: 200,
+              md: 50,
+            }}
+          />
+        </Box>
+
+        <Flex
+          zIndex={2}
+          justify="center"
+          fontWeight="bold"
+          position="absolute"
+          bottom="16px"
+          left="50%"
+          transform={"translateX(-50%)"}
+          fontSize={{
+            base: 16,
+            lg: 22,
+          }}>
+          {tier.eth} ETH
+        </Flex>
+      </Flex>
+
+      <Flex
+        border="1px solid rgba(255, 255, 255, 0.24)"
+        mt="8px"
+        backgroundColor="#00000014"
+        p={4}
+        minH={{
+          base: 150,
+          lg: 200,
+        }}
+        flexDir="column"
+        align="center"
+        justify="space-between">
+        <Box
+          textAlign="center"
+          fontSize={{
+            base: 12,
+            lg: 16,
+          }}>
+          {tier.description}
+        </Box>
+
+        <Box fontWeight="bold">
+          {tier.totalSupply - generateCurrentSupply()}/{tier.totalSupply}
+        </Box>
+      </Flex>
+
+      {isWhitelisted && (
+        <Box
+          minH={{
+            base: "auto",
+            lg: "140px",
+          }}>
+          <Flex flexDir={tier.id === 3 ? "row" : "column"} align="center" gap={2}>
+            <Button
+              h="48px"
+              mt={4}
+              disabled={!isWhitelisted && isPending}
+              textTransform="uppercase"
+              // backgroundColor="transparent"
+              backgroundColor="#CD1A64"
+              transition="all .4s"
+              width="170px"
+              color="white"
+              position="relative"
+              overflow="hidden"
+              _hover={{
+                _after: {
+                  backgroundColor: "#CD1A64",
+                },
+              }}
+              width="170px"
+              // _after={{
+              //   content: "''",
+              //   top: "-76px",
+              //   transition: "all .4s",
+              //   position: "absolute",
+              //   right: "125px",
+              //   width: "150px",
+              //   height: "1100%",
+              //   transformOrigin: "54% 0",
+              //   transform: "rotate(-45deg)",
+              //   zIndex: -1,
+              //   backgroundColor: "#CD1A64",
+              // }}
+              onClick={handleClickTier}>
+              {isPending ? "Loading..." : `Buy Tier ${tier.id}`}
+            </Button>
+
+            {tier.id === 3 && (
+//               <Flex flexDir="column" justify="center" align="center" mt={4}>
+//                 <Button
+//                   disabled={!isWhitelisted}
+//                   h="48px"
+//                   mt={4}
+//                   textTransform="uppercase"
+//                   transition="all .4s"
+//                   _hover={{
+//                     _after: {
+//                       backgroundColor: "#c9a822",
+//                     },
+//                   }}
+//                   color="white"
+//                   // backgroundColor="transparent"
+//                   backgroundColor="#cca310"
+//                   width="170px"
+//                   position="relative"
+//                   overflow="hidden"
+//                   >
+//                   Buy & Upgrade
+//                 </Button>
+//
+//                 <Box fontWeight="bold">4000 DMT</Box>
+//
+//               </Flex>
+              <Button
+                // disabled={!isWhitelisted}
+                onClick={handleClickApprove}
+                h="48px"
+                mt={4}
+                textTransform="uppercase"
+                transition="all .4s"
+                _hover={{
+                  _after: {
+                    backgroundColor: "#c9a822",
+                  },
+                }}
+                color="white"
+                backgroundColor="transparent"
+                width="170px"
+                position="relative"
+                overflow="hidden"
+                _after={{
+                  content: "''",
+                  top: "-76px",
+                  transition: "all .4s",
+                  position: "absolute",
+                  right: "125px",
+                  width: "150px",
+                  height: "1100%",
+                  transformOrigin: "54% 0",
+                  transform: "rotate(-45deg)",
+                  zIndex: -1,
+                  backgroundColor: "#eabe10",
+                }}>
+                APPROVE
+              </Button>
+            )}
+          </Flex>
+        </Box>
       )}
     </Flex>
-  </Flex>
   );
 };
 
