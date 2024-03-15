@@ -9,6 +9,7 @@ import {
 } from "wagmi";
 import { parseEther } from "ethers";
 import useGetTier3Supply from "./useGetTier3Supply";
+import { TIER_3_PRICE } from '@/constants';
 
 const usePurchaseTier3 = () => {
   const { address } = useAccount();
@@ -23,7 +24,7 @@ const usePurchaseTier3 = () => {
       abi: AbiObject.abi,
       functionName: "participateTier3",
       args: [BigInt(amount ? amount : 1), merkleProof],
-      value: parseEther("0.288") * BigInt(amount ? amount : 1),
+      value: parseEther(TIER_3_PRICE) * BigInt(amount ? amount : 1),
     });
   }, []);
 

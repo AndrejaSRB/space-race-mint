@@ -13,6 +13,7 @@ const WalletProtection = ({ children }) => {
   return (
     <Flex
       bgImage={BackgroundImage}
+      backgroundColor="#161520"
       justifyContent="center"
       align="center"
       flexDir="column"

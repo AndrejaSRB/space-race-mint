@@ -71,6 +71,7 @@ const Home = () => {
   return (
     <Flex
       position="relative"
+      backgroundColor="#161520"
       backgroundImage={`url(${BackgroundImage.src})`}
       backgroundPosition="center"
       backgroundSize="cover"

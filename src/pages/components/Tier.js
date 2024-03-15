@@ -211,43 +211,47 @@ const Tier = ({ tier, isWhitelisted }) => {
         </Box>
       </Flex>
 
-      <Flex justify="center" align="center" mt="16px" gap={2}>
-        <Flex
-          justify="center"
-          align="center"
-          w="48px"
-          height="48px"
-          background="#CD1A64"
-          borderRadius={4}
-          onClick={handleDecrease}
-          userSelect="none"
-          cursor="pointer">
-          -
+      {isWhitelisted && (
+        <Flex justify="center" align="center" mt="16px" gap={2}>
+          <Flex
+            justify="center"
+            align="center"
+            w="48px"
+            height="48px"
+            background="#CD1A64"
+            borderRadius={4}
+            onClick={handleDecrease}
+            userSelect="none"
+            cursor="pointer">
+            -
+          </Flex>
+
+          <Flex
+            color="black"
+            justify="center"
+            align="center"
+            w="48px"
+            height="48px"
+            background="white"
+            userSelect="none"
+            borderRadius={4}>
+            {amount}
+          </Flex>
+
+          <Flex
+            justify="center"
+            align="center"
+            w="48px"
+            height="48px"
+            background="#CD1A64"
+            borderRadius={4}
+            onClick={handleIncrease}
+            userSelect="none"
+            cursor="pointer">
+            +
+          </Flex>
         </Flex>
-        <Flex
-          color="black"
-          justify="center"
-          align="center"
-          w="48px"
-          height="48px"
-          background="white"
-          userSelect="none"
-          borderRadius={4}>
-          {amount}
-        </Flex>
-        <Flex
-          justify="center"
-          align="center"
-          w="48px"
-          height="48px"
-          background="#CD1A64"
-          borderRadius={4}
-          onClick={handleIncrease}
-          userSelect="none"
-          cursor="pointer">
-          +
-        </Flex>
-      </Flex>
+      )}
 
       {isWhitelisted && (
         <Box>

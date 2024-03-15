@@ -3,6 +3,7 @@ import AbiObject from "../../abi";
 import { getMerkleProof } from "@/web3/merkle/merkle";
 import { useWriteContract, useAccount, useWaitForTransactionReceipt } from 'wagmi'
 import { parseEther } from "ethers";
+import { UPDATE_PRICE } from '@/constants';
 
 const useUpdateToTier2 = () => {
   const { address } = useAccount();
@@ -17,7 +18,7 @@ const useUpdateToTier2 = () => {
       abi: AbiObject.abi,
       functionName: "participateTier2",
       args: [BigInt(1), true, merkleProof],
-      value: parseEther("0.0825")
+      value: parseEther(UPDATE_PRICE)
     })
   },[])
 
