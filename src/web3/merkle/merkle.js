@@ -30,8 +30,6 @@ const tree = new MerkleTree(
   { sortPairs: true },
 );
 
-// console.log('the Merkle root is:', tree.getRoot().toString('hex'));
-
 export function getMerkleRoot() {
   return tree.getRoot().toString('hex');
 }

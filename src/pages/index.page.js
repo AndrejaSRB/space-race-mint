@@ -63,6 +63,7 @@ const Home = () => {
   const isWhitelisted = useIsWhitelisted();
   const { disconnect } = useDisconnect();
 
+
   const handleDisconnect = () => {
     disconnect();
   }
