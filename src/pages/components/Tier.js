@@ -86,30 +86,12 @@ const Tier = ({ tier, isWhitelisted }) => {
         p={5}
         position="relative"
         backgroundColor="transparent"
-        borderLeft="1px solid rgba(255, 255, 255, 0.24)"
+        borderLeft="2px solid rgba(255, 255, 255, 0.24)"
+        borderRight="2px solid rgba(255, 255, 255, 0.24)"
+        borderTop="2px solid rgba(255, 255, 255, 0.24)"
         overflow="hidden"
         flexDir="column"
-        _before={{
-          content: "''",
-          height: "20%",
-          width: "calc(100% - 2px)",
-          top: "0px",
-          border: "2px solid rgba(255, 255, 255, 0.24)",
-          borderWidth: "2px 3px 0px 0px",
-          transform: "skew(45deg)",
-          transformOrigin: "right bottom",
-          position: "absolute",
-          left: 0,
-          zIndex: -1,
-        }}
-        _after={{
-          content: "''",
-          width: "calc(100% - 4px)",
-          bottom: "0px",
-          borderR: "2px solid rgba(255, 255, 255, 0.24)",
-          position: "absolute",
-          left: "0",
-        }}>
+        >
         <Box
           position="absolute"
           zIndex={2}
@@ -271,17 +253,12 @@ const Tier = ({ tier, isWhitelisted }) => {
                     backgroundColor="#eabe10">
                     {isPendingApproval ? "Loading..." : "APPROVE"}
                   </Button>
-                  <Box
-                    height={{
-                      base: 0,
-                      md: "24px",
-                    }}
-                  />
                 </Flex>
               ))}
           </Flex>
         </Box>
       )}
+
       <Flex
         justify="center"
         minH="22px"
