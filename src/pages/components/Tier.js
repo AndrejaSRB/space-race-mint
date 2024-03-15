@@ -54,6 +54,9 @@ const Tier = ({ tier, isWhitelisted }) => {
   };
 
   const isPending =
+    isPendingTier1 || isPendingTier2 || isPendingTier3;
+
+    const isDisabled =
     isPendingTier1 || isPendingTier2 || isPendingTier3 || isPendingApproval;
 
   useEffect(() => {
@@ -61,7 +64,7 @@ const Tier = ({ tier, isWhitelisted }) => {
     refetchTier2?.();
     refetchTier3?.();
     refetchAllowance?.();
-  }, [isPending]);
+  }, [isPending, isPendingApproval, isPendingUpdate]);
 
   return (
     <Flex
@@ -176,11 +179,7 @@ const Tier = ({ tier, isWhitelisted }) => {
       </Flex>
 
       {isWhitelisted && (
-        <Box
-          minH={{
-            base: "auto",
-            lg: "140px",
-          }}>
+        <Box>
           <Flex
             flexDir={{
               base: "column",
@@ -192,7 +191,7 @@ const Tier = ({ tier, isWhitelisted }) => {
               <Button
                 h="48px"
                 mt={4}
-                disabled={!isWhitelisted && isPending}
+                disabled={!isWhitelisted && isDisabled}
                 textTransform="uppercase"
                 backgroundColor="#CD1A64"
                 transition="all .4s"
@@ -242,7 +241,7 @@ const Tier = ({ tier, isWhitelisted }) => {
                       width="150px"
                       position="relative"
                       overflow="hidden">
-                      {isPending ? "Loading..." : "Buy & Upgrade"}
+                      {isPendingUpdate ? "Loading..." : "Buy & Upgrade"}
                     </Button>
 
                     <Box fontWeight="bold" position="relative" top="8px">
@@ -253,7 +252,7 @@ const Tier = ({ tier, isWhitelisted }) => {
               ) : (
                 <Flex flexDir="column" justify="center" align="center">
                   <Button
-                    disabled={!isWhitelisted && isPending}
+                    disabled={!isWhitelisted && isPendingApproval}
                     onClick={handleClickApprove}
                     h="48px"
                     mt={4}
@@ -270,7 +269,7 @@ const Tier = ({ tier, isWhitelisted }) => {
                     position="relative"
                     overflow="hidden"
                     backgroundColor="#eabe10">
-                    {isPending ? "Loading..." : "APPROVE"}
+                    {isPendingApproval ? "Loading..." : "APPROVE"}
                   </Button>
                   <Box
                     height={{
@@ -283,7 +282,21 @@ const Tier = ({ tier, isWhitelisted }) => {
           </Flex>
         </Box>
       )}
-      {tier.id === 3 && allowance && <Flex fontSize={12} mt={4} onClick={handleClickApprove} cursor="pointer">Do you want to approve more? Click here.</Flex>}
+      <Flex
+        justify="center"
+        minH="22px"
+        mt={{
+          base: 2,
+          lg: 5,
+        }}>
+        {tier.id === 3 && allowance && (
+          <Flex fontSize={12} onClick={handleClickApprove} cursor="pointer" transition="all .4s" _hover={{
+            color: "#CD1A64"
+          }}>
+            {isPendingApproval ? "Loading..." : "Do you want to approve more? Click here."}
+          </Flex>
+        )}
+      </Flex>
     </Flex>
   );
 };

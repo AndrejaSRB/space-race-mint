@@ -77,7 +77,10 @@ const Home = () => {
       zIndex={1}
       justify="center"
       align="center"
-      paddingBottom="40px"
+      paddingBottom={{
+        base: '40px',
+        lg: '120px'
+      }}
       paddingTop="40px"
       backgroundColor="#191C22"
       paddingLeft={{
