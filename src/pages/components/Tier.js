@@ -22,7 +22,6 @@ const Tier = ({ tier, isWhitelisted }) => {
   const { data: allowance } = useAllownace();
   const { onApproval, isConfirmed } = useApprove();
 
-
   const handleClickTier = () => {
     if (!isPending) {
       if (tier.id === 3) {
@@ -174,7 +173,10 @@ const Tier = ({ tier, isWhitelisted }) => {
             base: "auto",
             lg: "140px",
           }}>
-          <Flex flexDir={tier.id === 3 ? "row" : "column"} align="center" gap={2}>
+          <Flex
+            flexDir={tier.id === 3 ? "row" : "column"}
+            align="center"
+            gap={2}>
             <Button
               h="48px"
               mt={4}
@@ -210,65 +212,67 @@ const Tier = ({ tier, isWhitelisted }) => {
               {isPending ? "Loading..." : `Buy Tier ${tier.id}`}
             </Button>
 
-            {tier.id === 3 && (
-//               <Flex flexDir="column" justify="center" align="center" mt={4}>
-//                 <Button
-//                   disabled={!isWhitelisted}
-//                   h="48px"
-//                   mt={4}
-//                   textTransform="uppercase"
-//                   transition="all .4s"
-//                   _hover={{
-//                     _after: {
-//                       backgroundColor: "#c9a822",
-//                     },
-//                   }}
-//                   color="white"
-//                   // backgroundColor="transparent"
-//                   backgroundColor="#cca310"
-//                   width="170px"
-//                   position="relative"
-//                   overflow="hidden"
-//                   >
-//                   Buy & Upgrade
-//                 </Button>
-//
-//                 <Box fontWeight="bold">4000 DMT</Box>
-//
-//               </Flex>
-              <Button
-                // disabled={!isWhitelisted}
-                onClick={handleClickApprove}
-                h="48px"
-                mt={4}
-                textTransform="uppercase"
-                transition="all .4s"
-                _hover={{
-                  _after: {
-                    backgroundColor: "#c9a822",
-                  },
-                }}
-                color="white"
-                backgroundColor="transparent"
-                width="170px"
-                position="relative"
-                overflow="hidden"
-                _after={{
-                  content: "''",
-                  top: "-76px",
-                  transition: "all .4s",
-                  position: "absolute",
-                  right: "125px",
-                  width: "150px",
-                  height: "1100%",
-                  transformOrigin: "54% 0",
-                  transform: "rotate(-45deg)",
-                  zIndex: -1,
-                  backgroundColor: "#eabe10",
-                }}>
-                APPROVE
-              </Button>
-            )}
+            {tier.id === 3 &&
+              (allowance ? (
+                <>
+                  <Flex flexDir="column" justify="center" align="center" mt={4}>
+                    <Button
+                      disabled={!isWhitelisted}
+                      h="48px"
+                      mt={4}
+                      textTransform="uppercase"
+                      transition="all .4s"
+                      _hover={{
+                        _after: {
+                          backgroundColor: "#c9a822",
+                        },
+                      }}
+                      color="white"
+                      // backgroundColor="transparent"
+                      backgroundColor="#cca310"
+                      width="170px"
+                      position="relative"
+                      overflow="hidden">
+                      Buy & Upgrade
+                    </Button>
+
+                    <Box fontWeight="bold">4000 DMT</Box>
+                  </Flex>
+                </>
+              ) : (
+                <Button
+                  // disabled={!isWhitelisted}
+                  onClick={handleClickApprove}
+                  h="48px"
+                  mt={4}
+                  textTransform="uppercase"
+                  transition="all .4s"
+                  _hover={{
+                    _after: {
+                      backgroundColor: "#c9a822",
+                    },
+                  }}
+                  color="white"
+                  backgroundColor="transparent"
+                  width="170px"
+                  position="relative"
+                  overflow="hidden"
+                  _after={{
+                    content: "''",
+                    top: "-76px",
+                    transition: "all .4s",
+                    position: "absolute",
+                    right: "125px",
+                    width: "150px",
+                    height: "1100%",
+                    transformOrigin: "54% 0",
+                    transform: "rotate(-45deg)",
+                    zIndex: -1,
+                    backgroundColor: "#eabe10",
+                  }}>
+                  APPROVE
+                </Button>
+              ))}
           </Flex>
         </Box>
       )}

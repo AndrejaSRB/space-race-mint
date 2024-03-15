@@ -7,24 +7,19 @@ const useAllownace = () => {
 
   const contractAddress = process.env.NEXT_PUBLIC_CONTRACT;
 
-  console.log('test', {
+
+  const { data, refetch, loading, error } = useReadContract({
     abi: AbiObject.abi,
     address: process.env.NEXT_PUBLIC_ERC20_ADDRESS,
-    functionName: "allownace",
-    args: [address, contractAddress],
-  })
-
-
-  const { data, refetch, loading } = useReadContract({
-    abi: AbiObject.abi,
-    address: process.env.NEXT_PUBLIC_ERC20_ADDRESS,
-    functionName: "allownace",
+    functionName: 'allowance',
     args: [address, contractAddress],
   });
 
+  const convertedData = Number(data);
   console.log('data', data);
+  console.log('convertedData', convertedData);
 
-  return { data, refetch, loading };
+  return { data: Boolean(convertedData), refetch, loading };
 };
 
 export default useAllownace;
