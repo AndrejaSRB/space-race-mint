@@ -9,10 +9,30 @@ import usePurchaseTier1 from "@/hooks/usePurchaseTier1";
 import usePurchaseTier2 from "@/hooks/usePurchaseTier2";
 import useAllownace from "@/hooks/useAllowance";
 import useApprove from "@/hooks/useApprove";
-import { useEffect } from "react";
+import { useEffect, useMemo } from "react";
 import useUpdateToTier2 from "@/hooks/useUpdateToTier2";
+import useItemCounter from "@/hooks/useItemCounter";
 
 const Tier = ({ tier, isWhitelisted }) => {
+  const {
+    onDecrease: onDecreaseTier1,
+    onIncrease: onIncreaseTier1,
+    amount: tier1,
+    onReset: onResetTier1,
+  } = useItemCounter();
+  const {
+    onDecrease: onDecreaseTier2,
+    onIncrease: onIncreaseTier2,
+    amount: tier2,
+    onReset: onResetTier2,
+  } = useItemCounter();
+  const {
+    onDecrease: onDecreaseTier3,
+    onIncrease: onIncreaseTier3,
+    amount: tier3,
+    onReset: onResetTier3,
+  } = useItemCounter();
+
   const { onPurchaseTier3, isPending: isPendingTier3 } = usePurchaseTier3();
   const { onPurchaseTier1, isPending: isPendingTier1 } = usePurchaseTier1();
   const { onPurchaseTier2, isPending: isPendingTier2 } = usePurchaseTier2();
@@ -27,14 +47,47 @@ const Tier = ({ tier, isWhitelisted }) => {
   const handleClickTier = () => {
     if (!isPending) {
       if (tier.id === 3) {
-        onPurchaseTier3();
+        onPurchaseTier3(tier3);
       } else if (tier.id === 1) {
-        onPurchaseTier1();
+        onPurchaseTier1(tier1);
       } else if (tier.id === 2) {
-        onPurchaseTier2();
+        onPurchaseTier2(tier2);
       }
     }
   };
+
+  const handleDecrease = () => {
+    if (!isPending) {
+      if (tier.id === 1) {
+        onDecreaseTier1();
+      } else if (tier.id === 2) {
+        onDecreaseTier2();
+      } else if (tier.id === 3) {
+        onDecreaseTier3();
+      }
+    }
+  };
+  const handleIncrease = () => {
+    if (!isPending) {
+      if (tier.id === 1) {
+        onIncreaseTier1();
+      } else if (tier.id === 2) {
+        onIncreaseTier2();
+      } else if (tier.id === 3) {
+        onIncreaseTier3();
+      }
+    }
+  };
+
+  const amount = useMemo(() => {
+    if (tier.id === 1) {
+      return tier1;
+    } else if (tier.id === 2) {
+      return tier2;
+    } else if (tier.id === 3) {
+      return tier3;
+    }
+  }, [tier1, tier2, tier3]);
 
   const handleClickApprove = () => {
     onApproval();
@@ -53,10 +106,9 @@ const Tier = ({ tier, isWhitelisted }) => {
     }
   };
 
-  const isPending =
-    isPendingTier1 || isPendingTier2 || isPendingTier3;
+  const isPending = isPendingTier1 || isPendingTier2 || isPendingTier3;
 
-    const isDisabled =
+  const isDisabled =
     isPendingTier1 || isPendingTier2 || isPendingTier3 || isPendingApproval;
 
   useEffect(() => {
@@ -90,8 +142,7 @@ const Tier = ({ tier, isWhitelisted }) => {
         borderRight="2px solid rgba(255, 255, 255, 0.24)"
         borderTop="2px solid rgba(255, 255, 255, 0.24)"
         overflow="hidden"
-        flexDir="column"
-        >
+        flexDir="column">
         <Box
           position="absolute"
           zIndex={2}
@@ -160,6 +211,44 @@ const Tier = ({ tier, isWhitelisted }) => {
         </Box>
       </Flex>
 
+      <Flex justify="center" align="center" mt="16px" gap={2}>
+        <Flex
+          justify="center"
+          align="center"
+          w="48px"
+          height="48px"
+          background="#CD1A64"
+          borderRadius={4}
+          onClick={handleDecrease}
+          userSelect="none"
+          cursor="pointer">
+          -
+        </Flex>
+        <Flex
+          color="black"
+          justify="center"
+          align="center"
+          w="48px"
+          height="48px"
+          background="white"
+          userSelect="none"
+          borderRadius={4}>
+          {amount}
+        </Flex>
+        <Flex
+          justify="center"
+          align="center"
+          w="48px"
+          height="48px"
+          background="#CD1A64"
+          borderRadius={4}
+          onClick={handleIncrease}
+          userSelect="none"
+          cursor="pointer">
+          +
+        </Flex>
+      </Flex>
+
       {isWhitelisted && (
         <Box>
           <Flex
@@ -168,6 +257,7 @@ const Tier = ({ tier, isWhitelisted }) => {
               md: tier.id === 3 ? "row" : "column",
             }}
             align="center"
+            justify="center"
             gap={2}>
             <Flex flexDir="column" justify="center" align="center">
               <Button
@@ -177,7 +267,7 @@ const Tier = ({ tier, isWhitelisted }) => {
                 textTransform="uppercase"
                 backgroundColor="#CD1A64"
                 transition="all .4s"
-                width="150px"
+                width="100%"
                 color="white"
                 position="relative"
                 overflow="hidden"
@@ -186,7 +276,6 @@ const Tier = ({ tier, isWhitelisted }) => {
                     backgroundColor: "#CD1A64",
                   },
                 }}
-                width="150px"
                 onClick={handleClickTier}>
                 {isPending ? "Loading..." : `Buy Tier ${tier.id}`}
               </Button>
@@ -267,10 +356,17 @@ const Tier = ({ tier, isWhitelisted }) => {
           lg: 5,
         }}>
         {tier.id === 3 && allowance && (
-          <Flex fontSize={12} onClick={handleClickApprove} cursor="pointer" transition="all .4s" _hover={{
-            color: "#CD1A64"
-          }}>
-            {isPendingApproval ? "Loading..." : "Do you want to approve more? Click here."}
+          <Flex
+            fontSize={12}
+            onClick={handleClickApprove}
+            cursor="pointer"
+            transition="all .4s"
+            _hover={{
+              color: "#CD1A64",
+            }}>
+            {isPendingApproval
+              ? "Loading..."
+              : "Do you want to approve more? Click here."}
           </Flex>
         )}
       </Flex>

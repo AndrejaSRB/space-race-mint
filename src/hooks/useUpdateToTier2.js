@@ -12,7 +12,6 @@ const useUpdateToTier2 = () => {
 
 
   const onUpdateToTier2 = useCallback(() => {
-    console.log("CLICKED")
     writeContract({
       address: process.env.NEXT_PUBLIC_CONTRACT,
       abi: AbiObject.abi,
@@ -22,7 +21,6 @@ const useUpdateToTier2 = () => {
     })
   },[])
 
-  console.log('error', error);
 
 
   const { isLoading: isConfirming, isSuccess: isConfirmed, error: error2 } =

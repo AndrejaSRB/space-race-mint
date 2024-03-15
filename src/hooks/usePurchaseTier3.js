@@ -17,13 +17,13 @@ const usePurchaseTier3 = () => {
 
   const { data: hash, isPending, writeContract, error } = useWriteContract();
 
-  const onPurchaseTier3 = useCallback(async () => {
-    const res = await writeContract({
+  const onPurchaseTier3 = useCallback((amount) => {
+    writeContract({
       address: process.env.NEXT_PUBLIC_CONTRACT,
       abi: AbiObject.abi,
       functionName: "participateTier3",
-      args: [BigInt(1), merkleProof],
-      value: parseEther("0.288"),
+      args: [BigInt(amount ? amount : 1), merkleProof],
+      value: parseEther("0.288") * BigInt(amount ? amount : 1),
     });
   }, []);
 
@@ -38,7 +38,12 @@ const usePurchaseTier3 = () => {
     },
   });
 
-  return { onPurchaseTier3, isPending: isPending || isConfirming, isConfirming, isConfirmed };
+  return {
+    onPurchaseTier3,
+    isPending: isPending || isConfirming,
+    isConfirming,
+    isConfirmed,
+  };
 };
 
 export default usePurchaseTier3;
