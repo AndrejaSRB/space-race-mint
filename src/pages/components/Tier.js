@@ -313,7 +313,7 @@ const Tier = ({ tier, isWhitelisted }) => {
                       }}
                       color="white"
                       backgroundColor="#cca310"
-                      width="150px"
+                      width="100%"
                       position="relative"
                       overflow="hidden">
                       {isPendingUpdate ? "Loading..." : "Buy & Upgrade"}
@@ -340,12 +340,18 @@ const Tier = ({ tier, isWhitelisted }) => {
                     }}
                     color="white"
                     backgroundColor="transparent"
-                    width="150px"
+                    width="100%"
                     position="relative"
                     overflow="hidden"
                     backgroundColor="#eabe10">
-                    {isPendingApproval ? "Loading..." : "APPROVE"}
+                    {isPendingApproval ? "Loading..." : "APPROVE DMT"}
                   </Button>
+                  <Box
+                    height={{
+                      base: 0,
+                      md: "24px",
+                    }}
+                  />
                 </Flex>
               ))}
           </Flex>
