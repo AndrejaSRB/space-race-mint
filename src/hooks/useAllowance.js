@@ -16,9 +16,6 @@ const useAllownace = () => {
   });
 
   const convertedData = Number(data);
-  console.log('data', data);
-  console.log('convertedData', convertedData);
-
   return { data: Boolean(convertedData), refetch, loading };
 };
 

@@ -19,8 +19,8 @@ const Tier = ({ tier, isWhitelisted }) => {
   const { data: supplyTier2, refetch: refetchTier2 } = useGetTier2Supply();
   const { data: supplyTier3, refetch: refetchTier3 } = useGetTier3Supply();
 
-  const { data: allowance } = useAllownace();
-  const { onApproval, isConfirmed } = useApprove();
+  const { data: allowance, refetch: refetchAllowance } = useAllownace();
+  const { onApproval, isPending: isPendingApproval } = useApprove();
 
   const handleClickTier = () => {
     if (!isPending) {
@@ -48,13 +48,15 @@ const Tier = ({ tier, isWhitelisted }) => {
     }
   };
 
+
+  const isPending = isPendingTier1 || isPendingTier2 || isPendingTier3 || isPendingApproval;
+
   useEffect(() => {
     refetchTier1?.();
     refetchTier2?.();
     refetchTier3?.();
-  }, [isPendingTier1]);
-
-  const isPending = isPendingTier1 || isPendingTier2 || isPendingTier3;
+    refetchAllowance?.();
+  }, [isPending]);
 
   return (
     <Flex

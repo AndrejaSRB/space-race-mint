@@ -27,7 +27,7 @@ const useApprove= () => {
   });
 
 
-return {onApproval, isPending, isConfirming, isConfirmed};
+return {onApproval, isPending: isPending || isConfirming, isConfirming, isConfirmed};
 
 };
 
