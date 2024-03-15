@@ -10,13 +10,13 @@ import {
 import BackgroundImage from "../../public/background.png";
 import WalletProtection from "@/components/WalletProtection/WalletProtection";
 import Image from "next/image";
-import Logo from "../../public/logo.png";
+import Logo from "../../public/logo.svg";
 import Ship1 from "../../public/Tier_1_notail.png";
 import Ship2 from "../../public/Tier_2_notail.png";
 import Ship3 from "../../public/Tier_3_notail.png";
 import Tier from "@/pages/components/Tier";
 import { env } from "process";
-import { useReadContract, useAccount } from "wagmi";
+import { useReadContract, useAccount, useDisconnect } from "wagmi";
 import AbiObject from "../../abi";
 import formatBN from "@/utils/formatBN";
 import useIsWhitelisted from "@/hooks/useIsWhitelisted";
@@ -24,12 +24,14 @@ import useGetTier2Supply from "@/hooks/useGetTier2Supply";
 import { formatEther } from "ethers";
 import useIsWrongNetwork from "@/hooks/useIsWrongNetwork";
 import WrongNetwork from "./components/WrongNetwork";
+import { TIER_1_PRICE, TIER_2_PRICE, TIER_3_PRICE } from "@/constants";
+import ellipsis from '@/utils/ellipsis'
 
 const tiers = [
   {
     id: 3,
     title: "TIER 3",
-    eth: "0.066",
+    eth: TIER_3_PRICE,
     description:
       "Valid for one Ascension season into Stage 2, perfect for newcomers to the OogaVerse.",
     img: Ship3,
@@ -38,7 +40,7 @@ const tiers = [
   {
     id: 2,
     title: "TIER 2",
-    eth: "0.14",
+    eth: TIER_2_PRICE,
     description:
       "Provides access for three Ascension seasons, balancing cost with meaningful long-term utility.",
     img: Ship2,
@@ -47,7 +49,7 @@ const tiers = [
   {
     id: 1,
     title: "TIER 1",
-    eth: "0.288",
+    eth: TIER_1_PRICE,
     description:
       "These premium SpaceShips offer unlimited MekaApes Ascension season validity, ensuring continuous engagement across all aspects of Stage 2 and beyond.",
     img: Ship1,
@@ -56,11 +58,14 @@ const tiers = [
 ];
 
 const Home = () => {
-  const { address } = useAccount();
+  const { address, isConnected } = useAccount();
   const isWrongNetwork = useIsWrongNetwork();
   const isWhitelisted = useIsWhitelisted();
+  const { disconnect } = useDisconnect();
 
-  console.log("isWrongNetwork", isWrongNetwork);
+  const handleDisconnect = () => {
+    disconnect();
+  }
 
   return (
     <Flex
@@ -75,9 +80,33 @@ const Home = () => {
       paddingBottom="40px"
       paddingTop="40px"
       backgroundColor="#191C22"
+      paddingLeft={{
+        base: 4,
+        md: 0,
+      }}
+      paddingRight={{
+        base: 4,
+        md: 0,
+      }}
+      paddingTop={{
+        base: 24,
+      }}
       minH="100vh"
       color="white">
       {isWrongNetwork && <WrongNetwork />}
+
+      {isConnected && (
+        <Flex position="absolute" right="16px" top="16px" alignItems="center" gap={2}>
+          <Box fontWeight="bold">{ellipsis(address)}</Box>
+
+          <Button backgroundColor="#CD1A64" color="white" _hover={{
+            backgroundColor: "#CD1A64",
+          }}
+          onClick={handleDisconnect}>
+            Disconnect
+          </Button>
+        </Flex>
+      )}
 
       <Flex
         flexDir="column"

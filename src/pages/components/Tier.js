@@ -10,11 +10,13 @@ import usePurchaseTier2 from "@/hooks/usePurchaseTier2";
 import useAllownace from "@/hooks/useAllowance";
 import useApprove from "@/hooks/useApprove";
 import { useEffect } from "react";
+import useUpdateToTier2 from "@/hooks/useUpdateToTier2";
 
 const Tier = ({ tier, isWhitelisted }) => {
   const { onPurchaseTier3, isPending: isPendingTier3 } = usePurchaseTier3();
   const { onPurchaseTier1, isPending: isPendingTier1 } = usePurchaseTier1();
   const { onPurchaseTier2, isPending: isPendingTier2 } = usePurchaseTier2();
+  const { onUpdateToTier2, isPending: isPendingUpdate } = useUpdateToTier2();
   const { data: supplyTier1, refetch: refetchTier1 } = useGetTier1Supply();
   const { data: supplyTier2, refetch: refetchTier2 } = useGetTier2Supply();
   const { data: supplyTier3, refetch: refetchTier3 } = useGetTier3Supply();
@@ -38,6 +40,9 @@ const Tier = ({ tier, isWhitelisted }) => {
     onApproval();
   };
 
+  const handleClickUpgrade = () => {
+    onUpdateToTier2();
+  };
   const generateCurrentSupply = () => {
     if (tier.id === 1) {
       return supplyTier1 ? Number(supplyTier1) : 0;
@@ -48,8 +53,12 @@ const Tier = ({ tier, isWhitelisted }) => {
     }
   };
 
-
-  const isPending = isPendingTier1 || isPendingTier2 || isPendingTier3 || isPendingApproval;
+  const isPending =
+    isPendingTier1 ||
+    isPendingTier2 ||
+    isPendingTier3 ||
+    isPendingApproval ||
+    isPendingUpdate;
 
   useEffect(() => {
     refetchTier1?.();
@@ -60,6 +69,10 @@ const Tier = ({ tier, isWhitelisted }) => {
 
   return (
     <Flex
+    w={{
+      base: "100%",
+      lg: "33.3%",
+    }}
       position="relative"
       zIndex={1}
       key={tier.id}
@@ -176,52 +189,51 @@ const Tier = ({ tier, isWhitelisted }) => {
             lg: "140px",
           }}>
           <Flex
-            flexDir={tier.id === 3 ? "row" : "column"}
+            flexDir={{
+              base: 'column',
+              md: tier.id === 3 ? "row" : "column"
+            }}
             align="center"
             gap={2}>
-            <Button
-              h="48px"
-              mt={4}
-              disabled={!isWhitelisted && isPending}
-              textTransform="uppercase"
-              // backgroundColor="transparent"
-              backgroundColor="#CD1A64"
-              transition="all .4s"
-              width="170px"
-              color="white"
-              position="relative"
-              overflow="hidden"
-              _hover={{
-                _after: {
-                  backgroundColor: "#CD1A64",
-                },
-              }}
-              width="170px"
-              // _after={{
-              //   content: "''",
-              //   top: "-76px",
-              //   transition: "all .4s",
-              //   position: "absolute",
-              //   right: "125px",
-              //   width: "150px",
-              //   height: "1100%",
-              //   transformOrigin: "54% 0",
-              //   transform: "rotate(-45deg)",
-              //   zIndex: -1,
-              //   backgroundColor: "#CD1A64",
-              // }}
-              onClick={handleClickTier}>
-              {isPending ? "Loading..." : `Buy Tier ${tier.id}`}
-            </Button>
+            <Flex flexDir="column" justify="center" align="center">
+              <Button
+                h="48px"
+                mt={4}
+                disabled={!isWhitelisted && isPending}
+                textTransform="uppercase"
+                backgroundColor="#CD1A64"
+                transition="all .4s"
+                width="150px"
+                color="white"
+                position="relative"
+                overflow="hidden"
+                _hover={{
+                  _after: {
+                    backgroundColor: "#CD1A64",
+                  },
+                }}
+                width="150px"
+                onClick={handleClickTier}>
+                {isPending ? "Loading..." : `Buy Tier ${tier.id}`}
+              </Button>
+              <Box height={{
+                base: 0,
+                md: "24px"
+              }} />
+            </Flex>
 
             {tier.id === 3 &&
               (allowance ? (
                 <>
-                  <Flex flexDir="column" justify="center" align="center" mt={4}>
+                  <Flex flexDir="column" justify="center" align="center">
                     <Button
-                      disabled={!isWhitelisted}
+                      disabled={!isWhitelisted && isPending}
+                      onClick={handleClickUpgrade}
                       h="48px"
-                      mt={4}
+                      mt={{
+                        base: 0,
+                        md: 4,
+                      }}
                       textTransform="uppercase"
                       transition="all .4s"
                       _hover={{
@@ -230,12 +242,11 @@ const Tier = ({ tier, isWhitelisted }) => {
                         },
                       }}
                       color="white"
-                      // backgroundColor="transparent"
                       backgroundColor="#cca310"
-                      width="170px"
+                      width="150px"
                       position="relative"
                       overflow="hidden">
-                      Buy & Upgrade
+                      {isPending ? "Loading..." : "Buy & Upgrade"}
                     </Button>
 
                     <Box fontWeight="bold">4000 DMT</Box>
@@ -243,7 +254,7 @@ const Tier = ({ tier, isWhitelisted }) => {
                 </>
               ) : (
                 <Button
-                  // disabled={!isWhitelisted}
+                  disabled={!isWhitelisted && isPending}
                   onClick={handleClickApprove}
                   h="48px"
                   mt={4}
@@ -256,7 +267,7 @@ const Tier = ({ tier, isWhitelisted }) => {
                   }}
                   color="white"
                   backgroundColor="transparent"
-                  width="170px"
+                  width="150px"
                   position="relative"
                   overflow="hidden"
                   _after={{
@@ -272,7 +283,7 @@ const Tier = ({ tier, isWhitelisted }) => {
                     zIndex: -1,
                     backgroundColor: "#eabe10",
                   }}>
-                  APPROVE
+                  {isPending ? "Loading..." : "APPROVE"}
                 </Button>
               ))}
           </Flex>

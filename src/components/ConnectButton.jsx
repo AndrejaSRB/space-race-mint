@@ -31,10 +31,7 @@ const ConnectWalletButton = (props) => {
       onClick={onClick}
       isDisabled={loading}
       color="white"
-      backgroundColor="#CD1A64"
-      clipPath={
-        "polygon(-10% -10%, 110% -10%, 110% 110%, 10% 110%, -10% 0%);  width: 300px"
-      }>
+      backgroundColor="#CD1A64">
       {loading ? "Loading..." : label}
     </Button>
   );
