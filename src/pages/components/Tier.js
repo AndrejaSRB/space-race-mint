@@ -54,11 +54,7 @@ const Tier = ({ tier, isWhitelisted }) => {
   };
 
   const isPending =
-    isPendingTier1 ||
-    isPendingTier2 ||
-    isPendingTier3 ||
-    isPendingApproval ||
-    isPendingUpdate;
+    isPendingTier1 || isPendingTier2 || isPendingTier3 || isPendingApproval;
 
   useEffect(() => {
     refetchTier1?.();
@@ -69,10 +65,10 @@ const Tier = ({ tier, isWhitelisted }) => {
 
   return (
     <Flex
-    w={{
-      base: "100%",
-      lg: "33.3%",
-    }}
+      w={{
+        base: "100%",
+        lg: "33.3%",
+      }}
       position="relative"
       zIndex={1}
       key={tier.id}
@@ -107,11 +103,9 @@ const Tier = ({ tier, isWhitelisted }) => {
           content: "''",
           width: "calc(100% - 4px)",
           bottom: "0px",
-          border: "2px solid rgba(255, 255, 255, 0.24)",
-          borderWidth: "2px 3px 0px 0px",
+          borderR: "2px solid rgba(255, 255, 255, 0.24)",
           position: "absolute",
-          left: 0,
-          zIndex: -1,
+          left: "0",
         }}>
         <Box
           position="absolute"
@@ -157,8 +151,7 @@ const Tier = ({ tier, isWhitelisted }) => {
       </Flex>
 
       <Flex
-        border="1px solid rgba(255, 255, 255, 0.24)"
-        mt="8px"
+        border="2px solid rgba(255, 255, 255, 0.24)"
         backgroundColor="#00000014"
         p={4}
         minH={{
@@ -190,8 +183,8 @@ const Tier = ({ tier, isWhitelisted }) => {
           }}>
           <Flex
             flexDir={{
-              base: 'column',
-              md: tier.id === 3 ? "row" : "column"
+              base: "column",
+              md: tier.id === 3 ? "row" : "column",
             }}
             align="center"
             gap={2}>
@@ -216,10 +209,13 @@ const Tier = ({ tier, isWhitelisted }) => {
                 onClick={handleClickTier}>
                 {isPending ? "Loading..." : `Buy Tier ${tier.id}`}
               </Button>
-              <Box height={{
-                base: 0,
-                md: "24px"
-              }} />
+
+              <Box
+                height={{
+                  base: 0,
+                  md: "24px",
+                }}
+              />
             </Flex>
 
             {tier.id === 3 &&
@@ -227,7 +223,7 @@ const Tier = ({ tier, isWhitelisted }) => {
                 <>
                   <Flex flexDir="column" justify="center" align="center">
                     <Button
-                      disabled={!isWhitelisted && isPending}
+                      disabled={!isWhitelisted && isPendingUpdate}
                       onClick={handleClickUpgrade}
                       h="48px"
                       mt={{
@@ -249,46 +245,45 @@ const Tier = ({ tier, isWhitelisted }) => {
                       {isPending ? "Loading..." : "Buy & Upgrade"}
                     </Button>
 
-                    <Box fontWeight="bold">4000 DMT</Box>
+                    <Box fontWeight="bold" position="relative" top="8px">
+                      4000 DMT
+                    </Box>
                   </Flex>
                 </>
               ) : (
-                <Button
-                  disabled={!isWhitelisted && isPending}
-                  onClick={handleClickApprove}
-                  h="48px"
-                  mt={4}
-                  textTransform="uppercase"
-                  transition="all .4s"
-                  _hover={{
-                    _after: {
-                      backgroundColor: "#c9a822",
-                    },
-                  }}
-                  color="white"
-                  backgroundColor="transparent"
-                  width="150px"
-                  position="relative"
-                  overflow="hidden"
-                  _after={{
-                    content: "''",
-                    top: "-76px",
-                    transition: "all .4s",
-                    position: "absolute",
-                    right: "125px",
-                    width: "150px",
-                    height: "1100%",
-                    transformOrigin: "54% 0",
-                    transform: "rotate(-45deg)",
-                    zIndex: -1,
-                    backgroundColor: "#eabe10",
-                  }}>
-                  {isPending ? "Loading..." : "APPROVE"}
-                </Button>
+                <Flex flexDir="column" justify="center" align="center">
+                  <Button
+                    disabled={!isWhitelisted && isPending}
+                    onClick={handleClickApprove}
+                    h="48px"
+                    mt={4}
+                    textTransform="uppercase"
+                    transition="all .4s"
+                    _hover={{
+                      _after: {
+                        backgroundColor: "#c9a822",
+                      },
+                    }}
+                    color="white"
+                    backgroundColor="transparent"
+                    width="150px"
+                    position="relative"
+                    overflow="hidden"
+                    backgroundColor="#eabe10">
+                    {isPending ? "Loading..." : "APPROVE"}
+                  </Button>
+                  <Box
+                    height={{
+                      base: 0,
+                      md: "24px",
+                    }}
+                  />
+                </Flex>
               ))}
           </Flex>
         </Box>
       )}
+      {tier.id === 3 && allowance && <Flex fontSize={12} mt={4} onClick={handleClickApprove} cursor="pointer">Do you want to approve more? Click here.</Flex>}
     </Flex>
   );
 };

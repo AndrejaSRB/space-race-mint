@@ -10,7 +10,9 @@ const useUpdateToTier2 = () => {
 
   const { data: hash, isPending,writeContract, error } = useWriteContract();
 
+
   const onUpdateToTier2 = useCallback(() => {
+    console.log("CLICKED")
     writeContract({
       address: process.env.NEXT_PUBLIC_CONTRACT,
       abi: AbiObject.abi,
@@ -18,12 +20,16 @@ const useUpdateToTier2 = () => {
       args: [BigInt(1), true, merkleProof],
       value: parseEther("0.0825")
     })
-  },[]);
+  },[])
 
-  const { isLoading: isConfirming, isSuccess: isConfirmed } =
+  console.log('error', error);
+
+
+  const { isLoading: isConfirming, isSuccess: isConfirmed, error: error2 } =
   useWaitForTransactionReceipt({
     hash,
   });
+
 
 return {onUpdateToTier2, isPending: isPending || isConfirming, isConfirming, isConfirmed};
 
