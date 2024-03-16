@@ -27,6 +27,7 @@ const useUpdateToTier2 = () => {
 
   const onUpdateToTier2 = useCallback((amount, bigInt) => {
     const value = parseEther(UPDATE_PRICE) * BigInt(amount ? amount : 1);
+    const DMTValue = 4000 * amount;
     // ETH error
     if (value > bigInt) {
       toast({
@@ -37,11 +38,11 @@ const useUpdateToTier2 = () => {
         duration: 3000,
         isClosable: true,
       });
-    } else if (allowance < value) {
+    } else if (allowance < DMTValue) {
       // DMT Error
       toast({
         title: "Error",
-        description: "You need to approve more ETH for select amount.",
+        description: "You need to approve more DMT for select amount.",
         position: "top-right",
         status: "error",
         duration: 3000,
