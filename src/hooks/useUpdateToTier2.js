@@ -25,7 +25,7 @@ const useUpdateToTier2 = () => {
     status,
   } = useWriteContract();
 
-  const onUpdateToTier2 = useCallback((amount, bigInt) => {
+  const onUpdateToTier2 = useCallback((amount, bigInt, allowanceNumber) => {
     const value = parseEther(UPDATE_PRICE) * BigInt(amount ? amount : 1);
     const DMTValue = 4000 * amount;
     // ETH error
@@ -38,7 +38,9 @@ const useUpdateToTier2 = () => {
         duration: 3000,
         isClosable: true,
       });
-    } else if (allowance < DMTValue) {
+    }
+    console.log('DMTValue', DMTValue);
+    if (allowanceNumber < DMTValue) {
       // DMT Error
       toast({
         title: "Error",

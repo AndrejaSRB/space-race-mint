@@ -16,7 +16,7 @@ const useAllownace = () => {
   });
 
   const convertedData = Number(data);
-  return { data: Boolean(convertedData), refetch, loading };
+  return { data: Boolean(convertedData), refetch, loading, allowanceNumber: convertedData };
 };
 
 export default useAllownace;

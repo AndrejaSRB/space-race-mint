@@ -48,7 +48,11 @@ const Tier = ({ tier, isWhitelisted }) => {
   const { data: supplyTier2, refetch: refetchTier2 } = useGetTier2Supply();
   const { data: supplyTier3, refetch: refetchTier3 } = useGetTier3Supply();
 
-  const { data: allowance, refetch: refetchAllowance } = useAllownace();
+  const {
+    data: allowance,
+    refetch: refetchAllowance,
+    allowanceNumber,
+  } = useAllownace();
   const { onApproval, isPending: isPendingApproval } = useApprove();
   const {
     refetch: refetchBalance,
@@ -76,7 +80,7 @@ const Tier = ({ tier, isWhitelisted }) => {
     } else if (tier.id === 3) {
       return HARDCODED_ADDITIONAL_SUPPLY_TIER3;
     }
-  }
+  };
 
   const handleDecrease = () => {
     if (!isPending) {
@@ -116,7 +120,7 @@ const Tier = ({ tier, isWhitelisted }) => {
   };
 
   const handleClickUpgrade = () => {
-    onUpdateToTier2(tier3, bigInt);
+    onUpdateToTier2(tier3, bigInt, allowanceNumber);
   };
   const generateCurrentSupply = () => {
     if (tier.id === 1) {
@@ -258,7 +262,8 @@ const Tier = ({ tier, isWhitelisted }) => {
         </Box>
 
         <Box fontWeight="bold">
-          {tier.totalSupply - generateCurrentSupply() + generateSpareSupply()}/{tier.totalSupply}
+          {tier.totalSupply - generateCurrentSupply() + generateSpareSupply()}/
+          {tier.totalSupply}
         </Box>
       </Flex>
 
