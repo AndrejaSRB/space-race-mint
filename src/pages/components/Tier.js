@@ -12,8 +12,10 @@ import useApprove from "@/hooks/useApprove";
 import { useEffect, useMemo } from "react";
 import useUpdateToTier2 from "@/hooks/useUpdateToTier2";
 import useItemCounter from "@/hooks/useItemCounter";
-
+import useUserBalance from "@/hooks/useUserBalance";
+import { useAccount } from "wagmi";
 const Tier = ({ tier, isWhitelisted }) => {
+  const { address } = useAccount();
   const {
     onDecrease: onDecreaseTier1,
     onIncrease: onIncreaseTier1,
@@ -43,15 +45,16 @@ const Tier = ({ tier, isWhitelisted }) => {
 
   const { data: allowance, refetch: refetchAllowance } = useAllownace();
   const { onApproval, isPending: isPendingApproval } = useApprove();
+  const { refetch: refetchBalance, data: balance, bigInt } = useUserBalance(address);
 
   const handleClickTier = () => {
     if (!isPending) {
       if (tier.id === 3) {
-        onPurchaseTier3(tier3);
+        onPurchaseTier3(tier3, bigInt);
       } else if (tier.id === 1) {
-        onPurchaseTier1(tier1);
+        onPurchaseTier1(tier1, bigInt);
       } else if (tier.id === 2) {
-        onPurchaseTier2(tier2);
+        onPurchaseTier2(tier2, bigInt);
       }
     }
   };
@@ -94,7 +97,7 @@ const Tier = ({ tier, isWhitelisted }) => {
   };
 
   const handleClickUpgrade = () => {
-    onUpdateToTier2();
+    onUpdateToTier2(tier3, bigInt);
   };
   const generateCurrentSupply = () => {
     if (tier.id === 1) {
@@ -116,6 +119,7 @@ const Tier = ({ tier, isWhitelisted }) => {
     refetchTier2?.();
     refetchTier3?.();
     refetchAllowance?.();
+    refetchBalance?.();
   }, [isPending, isPendingApproval, isPendingUpdate]);
 
   return (
@@ -172,6 +176,8 @@ const Tier = ({ tier, isWhitelisted }) => {
 
         <Flex
           zIndex={2}
+          flexDir="column"
+          alignItems="center"
           justify="center"
           fontWeight="bold"
           position="absolute"
@@ -182,6 +188,7 @@ const Tier = ({ tier, isWhitelisted }) => {
             base: 16,
             lg: 22,
           }}>
+          <Box fontSize={12}>{tier.mysteryShard}</Box>
           {tier.eth} ETH
         </Flex>
       </Flex>
@@ -319,8 +326,12 @@ const Tier = ({ tier, isWhitelisted }) => {
                       {isPendingUpdate ? "Loading..." : "Buy & Upgrade"}
                     </Button>
 
-                    <Box fontWeight="bold" position="relative" top="8px">
-                      4000 DMT
+                    <Box
+                      fontWeight="bold"
+                      position="relative"
+                      top="8px"
+                      fontSize={13}>
+                      0.066 ETH + 4000 DMT
                     </Box>
                   </Flex>
                 </>

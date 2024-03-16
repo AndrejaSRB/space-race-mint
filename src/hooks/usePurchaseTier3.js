@@ -1,4 +1,4 @@
-import { useCallback } from "react";
+import { useCallback, useEffect } from "react";
 import AbiObject from "../../abi";
 import { getMerkleProof } from "@/web3/merkle/merkle";
 import {
@@ -9,22 +9,37 @@ import {
 } from "wagmi";
 import { parseEther } from "ethers";
 import useGetTier3Supply from "./useGetTier3Supply";
-import { TIER_3_PRICE } from '@/constants';
+import { TIER_3_PRICE } from "@/constants";
+import { useToast } from "@chakra-ui/react";
 
 const usePurchaseTier3 = () => {
+  const toast = useToast();
   const { address } = useAccount();
   const merkleProof = getMerkleProof(address);
   const { refetch } = useGetTier3Supply();
 
   const { data: hash, isPending, writeContract, error } = useWriteContract();
 
-  const onPurchaseTier3 = useCallback((amount) => {
+  const onPurchaseTier3 = useCallback((amount, bigInt) => {
+    const value = parseEther(TIER_3_PRICE) * BigInt(amount ? amount : 1);
+
+    if (value > bigInt) {
+      toast({
+        title: "Error",
+        description: "You don't have enough funds.",
+        position: "top-right",
+        status: "error",
+        duration: 3000,
+        isClosable: true,
+      });
+    }
+
     writeContract({
       address: process.env.NEXT_PUBLIC_CONTRACT,
       abi: AbiObject.abi,
       functionName: "participateTier3",
       args: [BigInt(amount ? amount : 1), merkleProof],
-      value: parseEther(TIER_3_PRICE) * BigInt(amount ? amount : 1),
+      value: value,
     });
   }, []);
 
@@ -38,6 +53,19 @@ const usePurchaseTier3 = () => {
       await refetch();
     },
   });
+
+  useEffect(() => {
+    if (isConfirmed) {
+      toast({
+        title: "Success",
+        description: "Tier 1 purchased successfully",
+        status: "success",
+        position: "top-right",
+        duration: 3000,
+        isClosable: true,
+      });
+    }
+  }, [isConfirmed]);
 
   return {
     onPurchaseTier3,

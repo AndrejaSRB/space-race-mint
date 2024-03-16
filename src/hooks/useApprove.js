@@ -17,7 +17,7 @@ const useApprove= () => {
       address: process.env.NEXT_PUBLIC_ERC20_ADDRESS,
       abi: AbiObject.abi,
       functionName: "approve",
-      args: [contractAddress, "100000000000000000000"],
+      args: [contractAddress, "40000000000000000000000"],
     })
   },[contractAddress])
 
