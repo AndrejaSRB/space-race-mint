@@ -1,4 +1,4 @@
-import { useCallback } from "react";
+import { useCallback, useEffect } from "react";
 import AbiObject from "../../abi";
 import { getMerkleProof } from "@/web3/merkle/merkle";
 import {
@@ -22,18 +22,8 @@ const useUpdateToTier2 = () => {
     isPending,
     writeContract,
     error,
-  } = useWriteContract({
-    onSuccess: () => {
-      toast({
-        title: "Success",
-        description: "Tier 1 purchased successfully",
-        position: "top-right",
-        status: "success",
-        duration: 3000,
-        isClosable: true,
-      });
-    },
-  });
+    status,
+  } = useWriteContract();
 
   const onUpdateToTier2 = useCallback((amount, bigInt) => {
     const value = parseEther(UPDATE_PRICE) * BigInt(amount ? amount : 1);
@@ -75,6 +65,18 @@ const useUpdateToTier2 = () => {
     hash,
   });
 
+  useEffect(() => {
+    if (status === "success") {
+      toast({
+        title: "Success",
+        description: "Tier 1 purchased successfully",
+        position: "top-right",
+        status: "success",
+        duration: 3000,
+        isClosable: true,
+      });
+    }
+  }, [status]);
 
   return {
     onUpdateToTier2,
