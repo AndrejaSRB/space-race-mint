@@ -68,6 +68,16 @@ const Tier = ({ tier, isWhitelisted }) => {
     }
   };
 
+  const generateSpareSupply = () => {
+    if (tier.id === 1) {
+      return HARDCODED_ADDITIONAL_SUPPLY_TIER1;
+    } else if (tier.id === 2) {
+      return HARDCODED_ADDITIONAL_SUPPLY_TIER2;
+    } else if (tier.id === 3) {
+      return HARDCODED_ADDITIONAL_SUPPLY_TIER3;
+    }
+  }
+
   const handleDecrease = () => {
     if (!isPending) {
       if (tier.id === 1) {
@@ -248,7 +258,7 @@ const Tier = ({ tier, isWhitelisted }) => {
         </Box>
 
         <Box fontWeight="bold">
-          {tier.totalSupply - generateCurrentSupply()}/{tier.totalSupply}
+          {tier.totalSupply - generateCurrentSupply() + generateSpareSupply()}/{tier.totalSupply}
         </Box>
       </Flex>
 
