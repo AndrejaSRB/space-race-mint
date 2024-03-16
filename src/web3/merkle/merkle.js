@@ -4574,11 +4574,21 @@ const addresses = [
   "0x5C6CC5b06174e7816D841740acf7adea64A2799C",
   "0x4ad028d98a460ea2e3cd28c1388a8b9788975f29",
   "0xAf6aaed595334D8100a21958e7e5BAf7c5697A10",
+  "0xa4E7FFdaA4b75007aeF76f92953cb37B2869aE68",
+  "0xA5b71Bac1a71C5c2A226B61E778C2a738Ff6b297",
+  "0x517745CdD024fADD9479B65A11C2012A50B0A89D",
+  "0x84Df49B1D4FdceE1e3B410669B7e5087412B411B",
+  "0x5C6CC5b06174e7816D841740acf7adea64A2799C",
+  "0x4ad028d98a460ea2e3cd28c1388a8b9788975f29",
+  "0xAf6aaed595334D8100a21958e7e5BAf7c5697A10",
 ];
 
 const tree = new MerkleTree(addresses.map(keccak256), keccak256, {
   sortPairs: true,
 });
+
+// Just unncomment below to get the Merkle root
+// console.log('the Merkle root is:', tree.getRoot().toString('hex'));
 
 export function getMerkleRoot() {
   return tree.getRoot().toString("hex");

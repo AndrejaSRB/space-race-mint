@@ -14,6 +14,11 @@ import useUpdateToTier2 from "@/hooks/useUpdateToTier2";
 import useItemCounter from "@/hooks/useItemCounter";
 import useUserBalance from "@/hooks/useUserBalance";
 import { useAccount } from "wagmi";
+import {
+  HARDCODED_ADDITIONAL_SUPPLY_TIER1,
+  HARDCODED_ADDITIONAL_SUPPLY_TIER2,
+  HARDCODED_ADDITIONAL_SUPPLY_TIER3,
+} from "@/constants";
 const Tier = ({ tier, isWhitelisted }) => {
   const { address } = useAccount();
   const {
@@ -45,7 +50,11 @@ const Tier = ({ tier, isWhitelisted }) => {
 
   const { data: allowance, refetch: refetchAllowance } = useAllownace();
   const { onApproval, isPending: isPendingApproval } = useApprove();
-  const { refetch: refetchBalance, data: balance, bigInt } = useUserBalance(address);
+  const {
+    refetch: refetchBalance,
+    data: balance,
+    bigInt,
+  } = useUserBalance(address);
 
   const handleClickTier = () => {
     if (!isPending) {
@@ -108,6 +117,31 @@ const Tier = ({ tier, isWhitelisted }) => {
       return supplyTier3 ? Number(supplyTier3) : 0;
     }
   };
+
+  const isReachedTotalSupply = useMemo(() => {
+    if (tier.id === 1) {
+      return (
+        tier.totalSupply -
+          generateCurrentSupply() +
+          HARDCODED_ADDITIONAL_SUPPLY_TIER1 >=
+        tier.totalSupply
+      );
+    } else if (tier.id === 2) {
+      return (
+        tier.totalSupply -
+          generateCurrentSupply() +
+          HARDCODED_ADDITIONAL_SUPPLY_TIER2 >=
+        tier.totalSupply
+      );
+    } else if (tier.id === 3) {
+      return (
+        tier.totalSupply -
+          generateCurrentSupply() +
+          HARDCODED_ADDITIONAL_SUPPLY_TIER3 >=
+        tier.totalSupply
+      );
+    }
+  }, [generateCurrentSupply, tier]);
 
   const isPending = isPendingTier1 || isPendingTier2 || isPendingTier3;
 
@@ -260,7 +294,7 @@ const Tier = ({ tier, isWhitelisted }) => {
         </Flex>
       )}
 
-      {isWhitelisted && (
+      {isWhitelisted && !isReachedTotalSupply && (
         <Box>
           <Flex
             flexDir={{
