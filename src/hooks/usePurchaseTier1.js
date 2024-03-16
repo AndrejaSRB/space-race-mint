@@ -1,4 +1,4 @@
-import { useCallback, useEffect } from "react";
+import { useCallback } from "react";
 import AbiObject from "../../abi";
 import { getMerkleProof } from "@/web3/merkle/merkle";
 import {
@@ -18,7 +18,18 @@ const usePurchaseTier1 = () => {
   const merkleProof = getMerkleProof(address);
   const { refetch } = useGetTier1Supply();
 
-  const { data: hash, isPending, writeContract, error } = useWriteContract();
+  const { data: hash, isPending, writeContract, error, on } = useWriteContract({
+    onSuccess: () => {
+      toast({
+        title: "Success",
+        description: "Tier 1 purchased successfully",
+        position: "top-right",
+        status: "success",
+        duration: 3000,
+        isClosable: true,
+      });
+    }
+  });
 
   const onPurchaseTier1 = useCallback((amount, bigInt) => {
     const value = parseEther(TIER_1_PRICE) * BigInt(amount ? amount : 1);
@@ -49,19 +60,6 @@ const usePurchaseTier1 = () => {
         await refetch();
       },
     });
-
-  useEffect(() => {
-    if (isConfirmed) {
-      toast({
-        title: "Success",
-        description: "Tier 1 purchased successfully",
-        position: "top-right",
-        status: "success",
-        duration: 3000,
-        isClosable: true,
-      });
-    }
-  }, [isConfirmed]);
 
   return {
     onPurchaseTier1,
