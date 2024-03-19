@@ -35,7 +35,7 @@ const tiers = [
     description:
       "Valid for one Ascension season into Stage 2, perfect for newcomers to the OogaVerse.",
     img: Ship3,
-    totalSupply: 1500,
+    totalSupply: 800,
     mysteryShard: "1000 Mystery Shards"
   },
   {
@@ -45,7 +45,7 @@ const tiers = [
     description:
       "Provides access for three Ascension seasons, balancing cost with meaningful long-term utility.",
     img: Ship2,
-    totalSupply: 1000,
+    totalSupply: 500,
     mysteryShard: "2500 Mystery Shards"
   },
   {
@@ -55,7 +55,7 @@ const tiers = [
     description:
       "These premium SpaceShips offer unlimited MekaApes Ascension season validity, ensuring continuous engagement across all aspects of Stage 2 and beyond.",
     img: Ship1,
-    totalSupply: 500,
+    totalSupply: 400,
     mysteryShard: "5000 Mystery Shards"
   },
 ];

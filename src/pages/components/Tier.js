@@ -19,6 +19,11 @@ import {
   HARDCODED_ADDITIONAL_SUPPLY_TIER2,
   HARDCODED_ADDITIONAL_SUPPLY_TIER3,
 } from "@/constants";
+import {
+  CORRECTION_TIER3,
+  CORRECTION_TIER2,
+  CORRECTION_TIER1,
+} from "@/constants";
 const Tier = ({ tier, isWhitelisted }) => {
   const { address } = useAccount();
   const {
@@ -79,6 +84,16 @@ const Tier = ({ tier, isWhitelisted }) => {
       return HARDCODED_ADDITIONAL_SUPPLY_TIER2;
     } else if (tier.id === 3) {
       return HARDCODED_ADDITIONAL_SUPPLY_TIER3;
+    }
+  };
+
+  const generateCorrection = () => {
+    if (tier.id === 1) {
+      return CORRECTION_TIER1;
+    } else if (tier.id === 2) {
+      return CORRECTION_TIER2;
+    } else if (tier.id === 3) {
+      return CORRECTION_TIER3;
     }
   };
 
@@ -262,7 +277,7 @@ const Tier = ({ tier, isWhitelisted }) => {
         </Box>
 
         <Box fontWeight="bold">
-          {tier.totalSupply - generateCurrentSupply() + generateSpareSupply()}/
+          {tier.totalSupply - generateCurrentSupply() + generateSpareSupply() + generateCorrection()}/
           {tier.totalSupply}
         </Box>
       </Flex>
